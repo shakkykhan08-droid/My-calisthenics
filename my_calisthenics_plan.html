@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>My Calisthenics Plan</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#141f31;--panel2:#1b2940;--text:#edf3fb;--muted:#a8b7ca;--accent:#62d49b;--blue:#77b7ff;--line:#2b3b53}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0b1220,#111d30);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:760px;margin:auto;padding:22px 16px 48px}.hero{padding:22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,#172940,#132033)}
+h1{margin:0 0 6px;font-size:28px}.sub{color:var(--muted);margin:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.stat{background:#0e1929;border-radius:13px;padding:12px}.stat b{display:block;font-size:21px}.stat span{color:var(--muted);font-size:12px}
+section{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px}.days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.day{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:11px 5px;border-radius:12px;font-weight:650}.day.active{border-color:var(--accent);background:#17352f}.day.done:after{content:" ✓";color:var(--accent)}
+h2{font-size:19px;margin:0 0 12px}.muted{color:var(--muted)}.tag{font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.item{padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.item label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}.item input{width:19px;height:19px;accent-color:var(--accent);margin-top:2px;flex:none}.item strong{display:block}.item small{display:block;color:var(--muted);margin-top:3px;line-height:1.4}
+button{cursor:pointer}.action{background:var(--accent);color:#092016;border:0;border-radius:12px;padding:12px 15px;font-weight:800}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 13px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.bar{height:9px;background:#26364c;border-radius:20px;overflow:hidden;margin-top:10px}.bar>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.skill{border-left:3px solid var(--blue);padding:10px 13px;background:#12243a;border-radius:0 12px 12px 0;line-height:1.5}
+.note{font-size:13px;color:var(--muted);line-height:1.5}.timer{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;margin:8px 0}
+a{color:var(--blue)}footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
+@media(max-width:430px){.days{grid-template-columns:repeat(4,1fr)}h1{font-size:24px}.stats{gap:6px}.stat{padding:9px}}
+</style>
+</head>
+<body>
+<main>
+<div class="hero">
+ <div class="tag">Your personal training dashboard</div>
+ <h1>My Calisthenics Plan 💪</h1>
+ <p class="sub">60-minute training system · Beginner to advanced</p>
+ <div class="stats">
+  <div class="stat"><b id="streak">0</b><span>Days checked this week</span></div>
+  <div class="stat"><b id="count">0/5</b><span>Training days done</span></div>
+  <div class="stat"><b>60 min</b><span>Daily time budget</span></div>
+ </div>
+</div>
+<section>
+ <h2>Choose your day</h2>
+ <div class="days" id="days"></div>
+ <div class="bar"><div id="progress"></div></div>
+ <p class="note" id="progressText">Complete your daily checklist to track progress.</p>
+</section>
+<section>
+ <div class="tag">Today's focus</div>
+ <h2 id="focus">Monday — Chest + Triceps</h2>
+ <p class="muted" id="overview"></p>
+ <h2 style="margin-top:20px">Part 1 · Main workout</h2>
+ <div id="workout"></div>
+ <h2 style="margin-top:20px">Part 2 · Skill practice</h2>
+ <div class="skill"><strong id="skillName"></strong><p id="skillDesc" style="margin:6px 0 0"></p></div>
+ <div id="skillList"></div>
+ <h2 style="margin-top:20px">Finish · Cool-down & recovery</h2>
+ <div id="recovery"></div>
+ <div class="row" style="margin-top:14px">
+  <button class="action" id="complete">Mark day complete</button>
+  <button class="secondary" id="resetDay">Reset today's checks</button>
+ </div>
+</section>
+<section>
+ <h2>60-minute session timer</h2>
+ <p class="note">Suggested guide: 5 min warm-up · 30 min workout · up to 15 min skill practice · 10 min cool-down/rest. Shorten skill practice if the main workout takes longer.</p>
+ <div class="timer" id="clock">60:00</div>
+ <div class="row">
+  <button class="action" id="start">Start</button>
+  <button class="secondary" id="pause">Pause</button>
+  <button class="secondary" id="restart">Reset</button>
+ </div>
+</section>
+<section>
+ <h2>Progress milestones</h2>
+ <p class="note">Tick these only when you can do them with controlled, pain-free form.</p>
+ <div id="milestones"></div>
+</section>
+<section>
+ <h2>Safety reminders</h2>
+ <p class="note">Warm up before training. Stop for sharp pain, dizziness or unusual symptoms. Don't practise advanced holds to failure. Use only stable, secure equipment; never use an unstable chair or table for rows or support holds. Rest and recover—don't force every session to fill all 60 minutes. At your current level, build basic strength before attempting planche, front lever, muscle-up or human flag.</p>
+</section>
+<footer>Progress is saved on this device in this browser. If you clear browser data or open the file in another browser/device, your checkmarks may not carry over.</footer>
+</main>
+<script>
+const plan=[
+{day:"Monday",focus:"Chest + Triceps",overview:"Push strength and a beginner handstand foundation.",work:[["Incline push-ups","3 × 6–10","Use a sturdy counter or wall-height surface. Keep your body straight; lower under control."],["Knee push-ups","2 × 5–8","Only if you can keep a straight line from knees to head; otherwise repeat incline push-ups."],["Close-grip incline push-ups","2 × 6–8","Hands slightly narrower than shoulders; elbows travel back, not flared wide."],["Plank","2 × 15–25 sec","Brace your abdomen and keep hips level."]],skill:"Handstand foundations",desc:"Prepare wrists and shoulders; no unsupported handstand attempts yet.",skills:[["Wrist circles and gentle palm rocks","2 min","Move gently; stop if wrists hurt."],["Pike hold","3 × 10–20 sec","Hands on a stable floor, hips raised; keep shoulders active."]]},
+{day:"Tuesday",focus:"Back + Biceps",overview:"Train pulling muscles with a backpack and practise seated compression for the L-sit.",work:[["Backpack bent-over rows","3 × 8–12","Use a securely packed light backpack. Hinge at hips with a neutral back; pull toward waist."],["Backpack curls","2 × 8–12","Keep elbows by your sides; use a light load."],["Reverse snow angels","2 × 8–10","Lie face down and move arms slowly in a comfortable range."],["Prone Y-T raises","2 × 6–8 each shape","Lift arms gently; avoid shrugging or forcing range."]],skill:"L-sit foundations",desc:"Build shoulder support and the ability to lift your legs before attempting an L-sit.",skills:[["Seated knee lifts","3 × 6–8","Sit tall, hands beside hips; lift one or both bent knees if comfortable."],["Supported tuck hold","3 × 5–10 sec","Use stable parallettes or sturdy floor support only if available; otherwise practise seated knee lifts."]]},
+{day:"Wednesday",focus:"Legs",overview:"Build lower-body strength and practise balance.",work:[["Bodyweight squats","3 × 8–12","Sit hips back, keep heels down and knees tracking in line with toes."],["Reverse lunges","2 × 6–8 each leg","Step back, lower only as far as comfortable; hold a wall lightly if needed."],["Glute bridges","2 × 10–12","Lift hips without arching your lower back."],["Calf raises","2 × 12–15","Rise slowly, pause, and lower with control."]],skill:"Balance and mobility",desc:"A lighter skill session on leg day—do not add hard upper-body work.",skills:[["Single-leg balance","2 × 20 sec each side","Stand near a wall for support; keep knee soft."],["Ankle and hip mobility","3–4 min","Use slow, comfortable movements."]]},
+{day:"Thursday",focus:"Core + Abs",overview:"Develop trunk control for future L-sit, handstand and lever progressions.",work:[["Dead bugs","2 × 6–8 each side","Keep lower back gently supported; move opposite arm and leg slowly."],["Plank","3 × 15–25 sec","Stop before your hips sag."],["Reverse crunches","2 × 8–10","Curl pelvis gently; avoid swinging legs."],["Side plank from knees","2 × 15–20 sec each side","Keep shoulder stacked over elbow and hips lifted."]],skill:"Core control + L-sit",desc:"Keep every repetition slow and controlled; no max-effort holds.",skills:[["Hollow-body tuck hold","3 × 10–15 sec","Lie on back, brace abs and lift shoulders gently; keep knees bent."],["Seated leg lifts","2 × 6–8","Hands beside thighs; lift one heel at a time if both legs are too hard."]]},
+{day:"Friday",focus:"Full Body",overview:"Practise familiar movement patterns without exhausting yourself.",work:[["Incline push-ups","2 × 6–10","Choose a height that lets you keep clean form."],["Bodyweight squats","2 × 10–12","Controlled range, no bouncing."],["Backpack rows","2 × 8–12","Light, secure backpack; neutral back."],["Bird dogs","2 × 6 each side","Extend opposite arm and leg without rotating hips."],["Mountain climbers (slow)","2 × 10 total","Keep shoulders over hands; step knees in slowly."]],skill:"Planche prerequisites",desc:"Only gentle wrist and shoulder preparation for now. No planche attempts.",skills:[["Wrist mobility","2 min","Gentle circles and comfortable palm rocks."],["Scapular push-ups at wall","2 × 8","Keep elbows straight; gently move chest away from and toward wall."]]},
+{day:"Saturday",focus:"Active Recovery",overview:"Recover while keeping your body moving gently.",work:[["Easy walk","15–25 min","Comfortable pace; you should be able to talk."],["Gentle full-body mobility","5–8 min","Move shoulders, hips, ankles and upper back without forcing stretches."]],skill:"Mobility and flexibility",desc:"No advanced strength skills today.",skills:[["Shoulder mobility","2 min","Slow arm circles and wall slides."],["Hip and ankle mobility","3 min","Gentle controlled movements."]]},
+{day:"Sunday",focus:"Complete Rest",overview:"Rest is part of training and helps you adapt.",work:[["Rest","As needed","No workout required. Gentle everyday movement is fine."]],skill:"Recovery",desc:"No skill training today.",skills:[["Sleep and recovery","8–10 hours sleep target","Eat balanced meals, hydrate and let muscles recover."]]}
+];
+const milestones=["5 clean incline push-ups in each of 3 sets","10 clean standard push-ups","30-second controlled plank","12 controlled backpack rows","20-second hollow tuck hold","20-second wall-supported handstand hold (only when ready)"];
+const key="calisthenics-dashboard-v1";
+let saved={checks:{},done:[],milestones:[]};try{saved={...saved,...JSON.parse(localStorage.getItem(key)||"{}")}}catch(e){}
+let selected=new Date().getDay();selected=selected===0?6:selected-1;
+function persist(){localStorage.setItem(key,JSON.stringify(saved));renderStats()}
+function dayChecks(i){return saved.checks[i]||[]}
+function renderStats(){document.getElementById("streak").textContent=saved.done.length;document.getElementById("count").textContent=saved.done.filter(x=>x<5).length+"/5";document.getElementById("progress").style.width=(saved.done.length/7*100)+"%";document.getElementById("progressText").textContent=saved.done.length+" of 7 weekly days marked complete."}
+function checkboxItem(text,detail,id,container,checked){let div=document.createElement("div");div.className="item";let label=document.createElement("label");let input=document.createElement("input");input.type="checkbox";input.checked=checked;input.addEventListener("change",()=>{let a=dayChecks(selected);if(input.checked&&!a.includes(id))a.push(id);if(!input.checked)a=a.filter(x=>x!==id);saved.checks[selected]=a;persist()});let wrap=document.createElement("span");let strong=document.createElement("strong");strong.textContent=text;let small=document.createElement("small");small.textContent=detail;wrap.append(strong,small);label.append(input,wrap);div.append(label);container.append(div)}
+function render(){let days=document.getElementById("days");days.innerHTML="";plan.forEach((p,i)=>{let b=document.createElement("button");b.className="day"+(i===selected?" active":"")+(saved.done.includes(i)?" done":"");b.textContent=p.day.slice(0,3);b.title=p.day;b.onclick=()=>{selected=i;render()};days.append(b)});
+let p=plan[selected];document.getElementById("focus").textContent=p.day+" — "+p.focus;document.getElementById("overview").textContent=p.overview;document.getElementById("skillName").textContent=p.skill;document.getElementById("skillDesc").textContent=p.desc;
+let w=document.getElementById("workout"),s=document.getElementById("skillList"),r=document.getElementById("recovery");w.innerHTML="";s.innerHTML="";r.innerHTML="";
+p.work.forEach((x,j)=>checkboxItem(x[0],x[1]+" · "+x[2],"w"+j,w,dayChecks(selected).includes("w"+j)));
+p.skills.forEach((x,j)=>checkboxItem(x[0],x[1]+" · "+x[2],"s"+j,s,dayChecks(selected).includes("s"+j)));
+checkboxItem("Cool down and check how you feel","Gentle breathing and stretching; stop if anything hurts.","recovery",r,dayChecks(selected).includes("recovery"));
+document.getElementById("complete").textContent=saved.done.includes(selected)?"Day marked complete ✓":"Mark day complete";
+document.getElementById("complete").disabled=saved.done.includes(selected);
+document.getElementById("complete").style.opacity=saved.done.includes(selected)?".6":"1";
+renderStats()}
+document.getElementById("complete").onclick=()=>{if(!saved.done.includes(selected))saved.done.push(selected);persist();render()};
+document.getElementById("resetDay").onclick=()=>{saved.checks[selected]=[];saved.done=saved.done.filter(x=>x!==selected);persist();render()};
+let ms=document.getElementById("milestones");milestones.forEach((m,i)=>checkboxItem(m,"Mark when achieved with good form.","m"+i,ms,saved.milestones.includes(i)));
+ms.addEventListener("change",e=>{if(e.target.type==="checkbox"){let idx=[...ms.querySelectorAll("input")].indexOf(e.target);if(idx>=0){if(e.target.checked&&!saved.milestones.includes(idx))saved.milestones.push(idx);else saved.milestones=saved.milestones.filter(x=>x!==idx);persist()}}});
+let remaining=3600,interval=null;function show(){document.getElementById("clock").textContent=String(Math.floor(remaining/60)).padStart(2,"0")+":"+String(remaining%60).padStart(2,"0")}
+document.getElementById("start").onclick=()=>{if(interval)return;interval=setInterval(()=>{if(remaining>0){remaining--;show()}else{clearInterval(interval);interval=null}},1000)};
+document.getElementById("pause").onclick=()=>{clearInterval(interval);interval=null};
+document.getElementById("restart").onclick=()=>{clearInterval(interval);interval=null;remaining=3600;show()};
+render();show();
+</script>
+</body></html>
